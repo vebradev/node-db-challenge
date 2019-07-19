@@ -3,7 +3,8 @@ const db = knex(require('../knexfile').development);
 
 module.exports = {
   getProject,
-  getActions
+  getActions,
+  addProject
 }
 
 function getProject(id) {
@@ -19,4 +20,13 @@ function getActions(id) {
     .from("projects")
     .leftJoin("actions", "projects.id", "actions.projectId")
     .where("projects.id", id)
+}
+
+function addProject(project) {
+  return db("projects")
+    .insert({
+      name: project.name,
+      desc: project.desc
+    })
+    .then(([id]) => this.getProject(id))
 }
